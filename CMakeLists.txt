@@ -3,4 +3,5 @@ project(Trabalho C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Trabalho main.c)
+add_executable(Trabalho
+        imagem.c)
