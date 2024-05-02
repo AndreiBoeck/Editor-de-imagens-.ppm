@@ -154,11 +154,11 @@ int main(void){
                 break;
             }
             case 3: {
-                matriz2 = aumentarBrilho(matriz,linhas,colunas, valor)
+                matriz2 = aumentarBrilho(matriz, linhas, colunas, valor);
                 break;
             }
             case 4: {
-                matriz2 = diminuirBrilho(matriz,linhas,colunas, valor)
+                matriz2 = diminuirBrilho(matriz, linhas, colunas, valor);
                 break;
             }
             case 5: {
