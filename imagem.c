@@ -63,9 +63,9 @@ struct Pixel **diminuirBrilho(struct Pixel **matrix, int linhas, int colunas, in
 
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
-            matrix[i][j].R -= valor;
-            matrix[i][j].G -= valor;
-            matrix[i][j].B -= valor;
+            matrix[i][j].R -= 20;
+            matrix[i][j].G -= 20;
+            matrix[i][j].B -= 20;
             //verificar se valores não ultrapassam o limite de 0
             if (matrix[i][j].R < 0) matrix[i][j].R = 0;
             if (matrix[i][j].G < 0) matrix[i][j].G = 0;
@@ -84,13 +84,13 @@ struct Pixel **aumentarBrilho(struct Pixel **matrix, int linhas, int colunas, in
 
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
-            matrix[i][j].R += valor;
-            matrix[i][j].G += valor;
-            matrix[i][j].B += valor;
-            //verificar se os valores não ultrapassam o limite de 255
-            if (matrix[i][j].R > 255) matrix[i][j].R = 255;
-            if (matrix[i][j].G > 255) matrix[i][j].G = 255;
-            if (matrix[i][j].B > 255) matrix[i][j].B = 255;
+            matrix[i][j].R += 20;
+            matrix[i][j].G += 20;
+            matrix[i][j].B += 20;
+            //verificar se os valores não ultrapassam o limite da imagem
+            if (matrix[i][j].R > 255) matrix[i][j].R = valor;
+            if (matrix[i][j].G > 255) matrix[i][j].G = valor;
+            if (matrix[i][j].B > 255) matrix[i][j].B = valor;
         }
     }
     return matrix;
