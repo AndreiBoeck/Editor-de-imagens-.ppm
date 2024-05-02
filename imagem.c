@@ -54,7 +54,7 @@ struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas) {
 //acredito que precisa verificar se está cinza
 //correção para caso seja maior que valor  
 
-struct Pixel **diminuirBrilho(struct Pixel **matrix, int linhas, int colunas, int valor) {
+struct Pixel **diminuirBrilho(struct Pixel **matrix, int linhas, int colunas) {
     /*if () {
         printf("A imagem não está cinza. Voltando ao menu...\n");
         return matrix; //retorna
@@ -158,7 +158,7 @@ int main(void){
                 break;
             }
             case 4: {
-                matriz2 = diminuirBrilho(matriz, linhas, colunas, valor);
+                matriz2 = diminuirBrilho(matriz, linhas, colunas);
                 break;
             }
             case 5: {
