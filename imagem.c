@@ -13,26 +13,92 @@ typedef struct{
     int valor;
 } TAMANHO;
 
-int inverte(int pixel){
-    // Subtrair valor RGB da variavel valor no struct TAMANHO
-    int pixel_invertido;
+struct Pixel **inverte(struct Pixel **matriz, int linhas, int colunas){
+    for (int i = 0; i < linhas; ++i) {
+        for (int j = 0; j < colunas; ++j) {
+            matriz[i][j].R /= 3;
+            matriz[i][j].G = matriz[i][j].R;
+            matriz[i][j].B = matriz[i][j].R;
+        }
+    }
+    return matriz;
+}
 
 
-    return pixel_invertido;
+struct Pixel **negativa(struct Pixel **matriz, int linhas, int colunas){
+    for (int i = 0; i < linhas; ++i) {
+        for (int j = 0; j < colunas; ++j) {
+            matriz[i][j].R = 255 - matriz[i][j].R;
+            matriz[i][j].G = 255 - matriz[i][j].G;
+            matriz[i][j].B = 255 - matriz[i][j].B;
+        }
+    }
+    return matriz;
+}
+
+struct Pixel **aumentaBrilho(struct Pixel **matriz, int linhas, int colunas) {
+    int porcentagem;
+    printf("deseja diminuir o brilho em quantos porcento? (0 - 100)");
+    scanf("%d", &porcentagem);
+
+    porcentagem += 100;
+    for (int i = 0; i < linhas; ++i) {
+        for (int j = 0; j < colunas; ++j) {
+            matriz[i][j].R = (matriz[i][j].R * porcentagem)/100;
+            matriz[i][j].G = (matriz[i][j].G * porcentagem)/100;
+            matriz[i][j].B = (matriz[i][j].B * porcentagem)/100;
+            if(matriz[i][j].R > 255){
+                matriz[i][j].R = 255;
+            }
+            if(matriz[i][j].G > 255){
+                matriz[i][j].G = 255;
+            }
+            if(matriz[i][j].B > 255){
+                matriz[i][j].B = 255;
+            }
+        }
+    }
+    return matriz;
+}
+struct Pixel **diminuiBrilho(struct Pixel **matriz, int linhas, int colunas){
+    int porcentagem;
+    printf("deseja diminuir o brilho em quantos porcento? (0 - 100)");
+    scanf("%d", &porcentagem);
+
+    porcentagem = 100 - porcentagem;
+    for (int i = 0; i < linhas; ++i) {
+        for (int j = 0; j < colunas; ++j) {
+            matriz[i][j].R = (matriz[i][j].R * porcentagem)/100;
+            matriz[i][j].G = (matriz[i][j].G * porcentagem)/100;
+            matriz[i][j].B = (matriz[i][j].B * porcentagem)/100;
+            if(matriz[i][j].R < 0){
+                matriz[i][j].R = 0;
+            }
+            if(matriz[i][j].G < 0){
+                matriz[i][j].G = 255;
+            }
+            if(matriz[i][j].B < 0){
+                matriz[i][j].B = 255;
+            }
+        }
+    }
+
+    return matriz;
 }
 
 struct Pixel **gira(struct Pixel **matrix, int linhas, int colunas) {
+    // Alocando memória para a nova matriz rotacionada
     struct Pixel **matriz = (struct Pixel **)malloc(colunas * sizeof(struct Pixel *));
-    for (int i = 0; i < colunas; i++)
-    {
+    for (int i = 0; i < colunas; i++) {
         matriz[i] = (struct Pixel *)malloc(linhas * sizeof(struct Pixel));
     }
 
-    for (int i = 0; i < linhas; ++i) {
-        for (int j = 0; j < colunas; ++j) {
-            matriz[j][i].R = matrix[i][j].R;
-            matriz[j][i].G = matrix[i][j].G;
-            matriz[j][i].B = matrix[i][j].B;
+    // Preenchendo a nova matriz com os valores rotacionados
+    for (int i = 0; i < colunas; ++i) {
+        for (int j = 0; j < linhas; ++j) {
+            matriz[i][j].R = matrix[linhas - j - 1][i].R;
+            matriz[i][j].G = matrix[linhas - j - 1][i].G;
+            matriz[i][j].B = matrix[linhas - j - 1][i].B;
         }
     }
     return matriz;
@@ -41,61 +107,22 @@ struct Pixel **gira(struct Pixel **matrix, int linhas, int colunas) {
 struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas) {
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
-            matrix[i][j].R -= 30;
-            matrix[i][j].G -= 15;
-            matrix[i][j].B -= 15;
+            int originalRed = matrix[i][j].R;
+            int originalGreen = matrix[i][j].G;
+            int originalBlue = matrix[i][j].B;
+
+            int newRed = (int)(0.393 * originalRed + 0.769 * originalGreen + 0.189 * originalBlue);
+            int newGreen = (int)(0.349 * originalRed + 0.686 * originalGreen + 0.168 * originalBlue);
+            int newBlue = (int)(0.272 * originalRed + 0.534 * originalGreen + 0.131 * originalBlue);
+
+            matrix[i][j].R = newRed > 255 ? 255 : newRed;
+            matrix[i][j].G = newGreen > 255 ? 255 : newGreen;
+            matrix[i][j].B = newBlue > 255 ? 255 : newBlue;
+
         }
     }
     return matrix;
 }
-
-
-//aumentar e diminuir brilho
-//acredito que precisa verificar se está cinza
-//correção para caso seja maior que valor  
-
-struct Pixel **diminuirBrilho(struct Pixel **matrix, int linhas, int colunas) {
-    /*if () {
-        printf("A imagem não está cinza. Voltando ao menu...\n");
-        return matrix; //retorna
-    }
-    */
-
-    for (int i = 0; i < linhas; ++i) {
-        for (int j = 0; j < colunas; ++j) {
-            matrix[i][j].R -= 20;
-            matrix[i][j].G -= 20;
-            matrix[i][j].B -= 20;
-            //verificar se valores não ultrapassam o limite de 0
-            if (matrix[i][j].R < 0) matrix[i][j].R = 0;
-            if (matrix[i][j].G < 0) matrix[i][j].G = 0;
-            if (matrix[i][j].B < 0) matrix[i][j].B = 0;
-        }
-    }
-    return matrix;
-}
-
-struct Pixel **aumentarBrilho(struct Pixel **matrix, int linhas, int colunas, int valor) {
-    /*if () {
-        printf("A imagem não está cinza. Voltando ao menu...\n");
-        return matrix;
-    }
-    */
-
-    for (int i = 0; i < linhas; ++i) {
-        for (int j = 0; j < colunas; ++j) {
-            matrix[i][j].R += 20;
-            matrix[i][j].G += 20;
-            matrix[i][j].B += 20;
-            //verificar se os valores não ultrapassam o limite da imagem
-            if (matrix[i][j].R > 255) matrix[i][j].R = valor;
-            if (matrix[i][j].G > 255) matrix[i][j].G = valor;
-            if (matrix[i][j].B > 255) matrix[i][j].B = valor;
-        }
-    }
-    return matrix;
-}
-
 
 int main(void){
     FILE *fp;
@@ -103,11 +130,10 @@ int main(void){
     char tipoImg[3];
     int i, j, linhas, colunas, valor, r, g, b;
     int escolha = -1;
-    char img[50];
+    char img[100];
     wprintf(L"Qual arquivo deseja usar?\n");
         scanf("%s", img);
     while(escolha != 0) {
-        printf("%s\n", img);
         fp = fopen(img, "r");
         if(fp == NULL){
             fprintf(stderr, "Erro ao abrir o arquivo %s.\n", img);
@@ -147,22 +173,30 @@ int main(void){
 
         struct Pixel **matriz2;
         switch (escolha) {
+            case 0: {
+                break;
+            }
             case 1: {
+                matriz2 = inverte(matriz, linhas, colunas);
                 break;
             }
             case 2: {
+                matriz2 = negativa(matriz, linhas, colunas);
                 break;
             }
             case 3: {
-                matriz2 = aumentarBrilho(matriz, linhas, colunas, valor);
+                matriz2 = aumentaBrilho(matriz, linhas, colunas);
                 break;
             }
             case 4: {
-                matriz2 = diminuirBrilho(matriz, linhas, colunas);
+                matriz2 = diminuiBrilho(matriz, linhas, colunas);
                 break;
             }
             case 5: {
                 matriz2 = gira(matriz, linhas, colunas);
+                int aux = linhas;
+                linhas = colunas;
+                colunas = aux;
                 break;
             }
             case 6: {
@@ -171,7 +205,10 @@ int main(void){
             }
             default:
                 fprintf(stderr, "Opção invalida.\n");
-                exit(EXIT_FAILURE);
+        }
+
+        if(escolha == 0){
+            break;
         }
 
         FILE *fp_novo = fopen("ImgAlterada.ppm", "w");
