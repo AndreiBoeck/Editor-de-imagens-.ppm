@@ -49,6 +49,54 @@ struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas) {
     return matrix;
 }
 
+
+//aumentar e diminuir brilho
+//acredito que precisa verificar se está cinza
+//correção para caso seja maior que valor  
+
+struct Pixel **diminuirBrilho(struct Pixel **matrix, int linhas, int colunas, int valor) {
+    /*if () {
+        printf("A imagem não está cinza. Voltando ao menu...\n");
+        return matrix; //retorna
+    }
+    */
+
+    for (int i = 0; i < linhas; ++i) {
+        for (int j = 0; j < colunas; ++j) {
+            matrix[i][j].R -= valor;
+            matrix[i][j].G -= valor;
+            matrix[i][j].B -= valor;
+            //verificar se valores não ultrapassam o limite de 0
+            if (matrix[i][j].R < 0) matrix[i][j].R = 0;
+            if (matrix[i][j].G < 0) matrix[i][j].G = 0;
+            if (matrix[i][j].B < 0) matrix[i][j].B = 0;
+        }
+    }
+    return matrix;
+}
+
+struct Pixel **aumentarBrilho(struct Pixel **matrix, int linhas, int colunas, int valor) {
+    /*if () {
+        printf("A imagem não está cinza. Voltando ao menu...\n");
+        return matrix;
+    }
+    */
+
+    for (int i = 0; i < linhas; ++i) {
+        for (int j = 0; j < colunas; ++j) {
+            matrix[i][j].R += valor;
+            matrix[i][j].G += valor;
+            matrix[i][j].B += valor;
+            //verificar se os valores não ultrapassam o limite de 255
+            if (matrix[i][j].R > 255) matrix[i][j].R = 255;
+            if (matrix[i][j].G > 255) matrix[i][j].G = 255;
+            if (matrix[i][j].B > 255) matrix[i][j].B = 255;
+        }
+    }
+    return matrix;
+}
+
+
 int main(void){
     FILE *fp;
     int c;
