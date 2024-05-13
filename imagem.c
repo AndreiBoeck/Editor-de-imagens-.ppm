@@ -79,10 +79,10 @@ struct Pixel **diminuiBrilho(struct Pixel **matriz, int linhas, int colunas){
                 matriz[i][j].R = 0;
             }
             if(matriz[i][j].G < 0){
-                matriz[i][j].G = 255;
+                matriz[i][j].G = 0;
             }
             if(matriz[i][j].B < 0){
-                matriz[i][j].B = 255;
+                matriz[i][j].B = 0;
             }
         }
     }
