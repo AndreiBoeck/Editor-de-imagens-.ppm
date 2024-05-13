@@ -13,7 +13,7 @@ typedef struct{
     int valor;
 } TAMANHO;
 
-struct Pixel **inverte(struct Pixel **matriz, int linhas, int colunas){
+struct Pixel **tCinza(struct Pixel **matriz, int linhas, int colunas){
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
             matriz[i][j].R /= 3;
@@ -47,6 +47,8 @@ struct Pixel **aumentaBrilho(struct Pixel **matriz, int linhas, int colunas) {
             matriz[i][j].R = (matriz[i][j].R * porcentagem)/100;
             matriz[i][j].G = (matriz[i][j].G * porcentagem)/100;
             matriz[i][j].B = (matriz[i][j].B * porcentagem)/100;
+
+            // Evita que o pixel ultrapasse o limite de 255.
             if(matriz[i][j].R > 255){
                 matriz[i][j].R = 255;
             }
@@ -71,6 +73,8 @@ struct Pixel **diminuiBrilho(struct Pixel **matriz, int linhas, int colunas){
             matriz[i][j].R = (matriz[i][j].R * porcentagem)/100;
             matriz[i][j].G = (matriz[i][j].G * porcentagem)/100;
             matriz[i][j].B = (matriz[i][j].B * porcentagem)/100;
+
+            // Evita que o pixel ultrapasse o limite de 0.
             if(matriz[i][j].R < 0){
                 matriz[i][j].R = 0;
             }
@@ -107,18 +111,18 @@ struct Pixel **gira(struct Pixel **matrix, int linhas, int colunas) {
 struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas) {
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
-            int originalRed = matrix[i][j].R;
-            int originalGreen = matrix[i][j].G;
-            int originalBlue = matrix[i][j].B;
+            int ogRed = matrix[i][j].R;
+            int ogGreen = matrix[i][j].G;
+            int ogBlue = matrix[i][j].B;
 
-            int newRed = (int)(0.393 * originalRed + 0.769 * originalGreen + 0.189 * originalBlue);
-            int newGreen = (int)(0.349 * originalRed + 0.686 * originalGreen + 0.168 * originalBlue);
-            int newBlue = (int)(0.272 * originalRed + 0.534 * originalGreen + 0.131 * originalBlue);
+            int newRed = (int)(0.393 * ogRed + 0.769 * ogGreen + 0.189 * ogBlue);
+            int newGreen = (int)(0.349 * ogRed + 0.686 * ogGreen + 0.168 * ogBlue);
+            int newBlue = (int)(0.272 * ogRed + 0.534 * ogGreen + 0.131 * ogBlue);
 
+            // Evita que o pixel ultrapasse o limite de 255.
             matrix[i][j].R = newRed > 255 ? 255 : newRed;
             matrix[i][j].G = newGreen > 255 ? 255 : newGreen;
             matrix[i][j].B = newBlue > 255 ? 255 : newBlue;
-
         }
     }
     return matrix;
@@ -141,10 +145,10 @@ int main(void){
         }
 
         // Lê o cabeçalho do arquivo
-        fscanf(fp, "%s", tipoImg);                    // lê o tipo de imagem P3
-        fscanf(fp, "%d %d", &colunas, &linhas);    // lê o tamanho da matriz
-        fscanf(fp, "%d", &valor);                   // lê o valor máximo.
-
+        fscanf(fp, "%s", tipoImg);                     // lê o tipo de imagem P3
+        fscanf(fp, "%d %d", &colunas, &linhas);        // lê o tamanho da matriz
+        fscanf(fp, "%d", &valor);                      // lê o valor máximo.
+ 
         // Alocação da matriz de pixels RGB
         struct Pixel **matriz = (struct Pixel **) malloc(linhas * sizeof(struct Pixel *));
         for (i = 0; i < linhas; i++) {
@@ -177,7 +181,7 @@ int main(void){
                 break;
             }
             case 1: {
-                matriz2 = inverte(matriz, linhas, colunas);
+                matriz2 = tCinza(matriz, linhas, colunas);
                 break;
             }
             case 2: {
@@ -230,4 +234,3 @@ int main(void){
     // Fecha o arquivo.
     printf("-------------------------------FIM-----------------------------\n");
 }
-
