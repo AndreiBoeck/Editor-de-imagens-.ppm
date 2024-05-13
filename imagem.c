@@ -6,13 +6,6 @@ struct Pixel
     int R, G, B;
 };
 
-
-typedef struct{
-    int coluna;
-    int linha;
-    int valor;
-} TAMANHO;
-
 struct Pixel **tCinza(struct Pixel **matriz, int linhas, int colunas){
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
@@ -25,18 +18,18 @@ struct Pixel **tCinza(struct Pixel **matriz, int linhas, int colunas){
 }
 
 
-struct Pixel **negativa(struct Pixel **matriz, int linhas, int colunas){
+struct Pixel **negativa(struct Pixel **matriz, int linhas, int colunas, int valor){
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
-            matriz[i][j].R = 255 - matriz[i][j].R;
-            matriz[i][j].G = 255 - matriz[i][j].G;
-            matriz[i][j].B = 255 - matriz[i][j].B;
+            matriz[i][j].R = valor - matriz[i][j].R;
+            matriz[i][j].G = valor - matriz[i][j].G;
+            matriz[i][j].B = valor - matriz[i][j].B;
         }
     }
     return matriz;
 }
 
-struct Pixel **aumentaBrilho(struct Pixel **matriz, int linhas, int colunas) {
+struct Pixel **aumentaBrilho(struct Pixel **matriz, int linhas, int colunas, int valor) {
     int porcentagem;
     printf("deseja diminuir o brilho em quantos porcento? (0 - 100)");
     scanf("%d", &porcentagem);
@@ -49,14 +42,14 @@ struct Pixel **aumentaBrilho(struct Pixel **matriz, int linhas, int colunas) {
             matriz[i][j].B = (matriz[i][j].B * porcentagem)/100;
 
             // Evita que o pixel ultrapasse o limite de 255.
-            if(matriz[i][j].R > 255){
-                matriz[i][j].R = 255;
+            if(matriz[i][j].R > valor){
+                matriz[i][j].R = valor;
             }
-            if(matriz[i][j].G > 255){
-                matriz[i][j].G = 255;
+            if(matriz[i][j].G > valor){
+                matriz[i][j].G = valor;
             }
-            if(matriz[i][j].B > 255){
-                matriz[i][j].B = 255;
+            if(matriz[i][j].B > valor){
+                matriz[i][j].B = valor;
             }
         }
     }
@@ -108,7 +101,7 @@ struct Pixel **gira(struct Pixel **matrix, int linhas, int colunas) {
     return matriz;
 }
 
-struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas) {
+struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas, int valor) {
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
             int ogRed = matrix[i][j].R;
@@ -120,9 +113,9 @@ struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas) {
             int newBlue = (int)(0.272 * ogRed + 0.534 * ogGreen + 0.131 * ogBlue);
 
             // Evita que o pixel ultrapasse o limite de 255.
-            matrix[i][j].R = newRed > 255 ? 255 : newRed;
-            matrix[i][j].G = newGreen > 255 ? 255 : newGreen;
-            matrix[i][j].B = newBlue > 255 ? 255 : newBlue;
+            matrix[i][j].R = newRed > valor ? valor : newRed;
+            matrix[i][j].G = newGreen > valor ? valor : newGreen;
+            matrix[i][j].B = newBlue > valor ? valor : newBlue;
         }
     }
     return matrix;
@@ -185,11 +178,11 @@ int main(void){
                 break;
             }
             case 2: {
-                matriz2 = negativa(matriz, linhas, colunas);
+                matriz2 = negativa(matriz, linhas, colunas, valor);
                 break;
             }
             case 3: {
-                matriz2 = aumentaBrilho(matriz, linhas, colunas);
+                matriz2 = aumentaBrilho(matriz, linhas, colunas, valor);
                 break;
             }
             case 4: {
@@ -204,7 +197,7 @@ int main(void){
                 break;
             }
             case 6: {
-                matriz2 = envelhecer(matriz, linhas, colunas);
+                matriz2 = envelhecer(matriz, linhas, colunas, valor);
                 break;
             }
             default:
