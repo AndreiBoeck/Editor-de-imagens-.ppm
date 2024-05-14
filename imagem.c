@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Definição da estrutura para armazenar valores de cor de cada pixel
 struct Pixel
 {
     int R, G, B;
 };
 
+// Converte a imagem para tons de cinza, ajustando R, G, B para serem iguais à média dos três
 struct Pixel **tCinza(struct Pixel **matriz, int linhas, int colunas){
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
@@ -17,7 +19,7 @@ struct Pixel **tCinza(struct Pixel **matriz, int linhas, int colunas){
     return matriz;
 }
 
-
+// Aplica o efeito negativo à imagem, subtraindo os valores de cor do máximo permitido
 struct Pixel **negativa(struct Pixel **matriz, int linhas, int colunas, int valor){
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
@@ -29,6 +31,7 @@ struct Pixel **negativa(struct Pixel **matriz, int linhas, int colunas, int valo
     return matriz;
 }
 
+// Aumenta o brilho da imagem com base em uma porcentagem fornecida pelo usuário
 struct Pixel **aumentaBrilho(struct Pixel **matriz, int linhas, int colunas, int valor) {
     int porcentagem;
     printf("deseja diminuir o brilho em quantos porcento? (0 - 100)");
@@ -55,6 +58,8 @@ struct Pixel **aumentaBrilho(struct Pixel **matriz, int linhas, int colunas, int
     }
     return matriz;
 }
+
+// Diminui o brilho da imagem com base em uma porcentagem fornecida pelo usuário
 struct Pixel **diminuiBrilho(struct Pixel **matriz, int linhas, int colunas){
     int porcentagem;
     printf("deseja diminuir o brilho em quantos porcento? (0 - 100)");
@@ -83,6 +88,7 @@ struct Pixel **diminuiBrilho(struct Pixel **matriz, int linhas, int colunas){
     return matriz;
 }
 
+// Gira a imagem 90 graus à direita
 struct Pixel **gira(struct Pixel **matrix, int linhas, int colunas) {
     // Alocando memória para a nova matriz rotacionada
     struct Pixel **matriz = (struct Pixel **)malloc(colunas * sizeof(struct Pixel *));
@@ -101,6 +107,7 @@ struct Pixel **gira(struct Pixel **matrix, int linhas, int colunas) {
     return matriz;
 }
 
+// Aplica um efeito que simula o envelhecimento da imagem
 struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas, int valor) {
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
@@ -121,6 +128,7 @@ struct Pixel **envelhecer(struct Pixel **matrix, int linhas, int colunas, int va
     return matrix;
 }
 
+// Função principal que gerencia o fluxo do programa, incluindo leitura e escrita de arquivos, e processamento de imagens
 int main(void){
     FILE *fp;
     int c;
@@ -129,7 +137,7 @@ int main(void){
     int escolha = -1;
     char img[100];
     wprintf(L"Qual arquivo deseja usar?\n");
-        scanf("%s", img);
+    scanf("%s", img);
     while(escolha != 0) {
         fp = fopen(img, "r");
         if(fp == NULL){
@@ -141,7 +149,7 @@ int main(void){
         fscanf(fp, "%s", tipoImg);                     // lê o tipo de imagem P3
         fscanf(fp, "%d %d", &colunas, &linhas);        // lê o tamanho da matriz
         fscanf(fp, "%d", &valor);                      // lê o valor máximo.
- 
+
         // Alocação da matriz de pixels RGB
         struct Pixel **matriz = (struct Pixel **) malloc(linhas * sizeof(struct Pixel *));
         for (i = 0; i < linhas; i++) {
@@ -157,16 +165,16 @@ int main(void){
             }
         }
 
-        // Fecha o arquivo.
+        // Fecha o arquivo após a leitura
         fclose(fp);
 
+        // Interface do usuário para escolha da manipulação de imagem
         wprintf(L"                      Escolha o que deseja:\n"
-                        "[1] - Gerar imagens tons de cinza      [2] - Gerar imagem negativa\n"
-                        "[3] - Aumentar brilho                  [4] - Diminuir brilho\n"
-                        "[5] - Girar 90 graus                   [6] - Envelhecer a imagem\n"
-                        "                           [0] - Sair\n");
+                "[1] - Gerar imagens tons de cinza      [2] - Gerar imagem negativa\n"
+                "[3] - Aumentar brilho                  [4] - Diminuir brilho\n"
+                "[5] - Girar 90 graus                   [6] - Envelhecer a imagem\n"
+                "                           [0] - Sair\n");
         scanf("%d", &escolha);
-
 
         struct Pixel **matriz2;
         switch (escolha) {
@@ -191,7 +199,7 @@ int main(void){
             }
             case 5: {
                 matriz2 = gira(matriz, linhas, colunas);
-                int aux = linhas;
+                int aux = linhas; // Troca linhas e colunas para a nova orientação
                 linhas = colunas;
                 colunas = aux;
                 break;
@@ -208,6 +216,7 @@ int main(void){
             break;
         }
 
+        // Cria um novo arquivo para salvar a imagem processada
         FILE *fp_novo = fopen("ImgAlterada.ppm", "w");
         if (fp_novo == NULL) {
             fprintf(stderr, "Erro ao criar o arquivo 'ImgAlterada.ppm'.\n");
@@ -221,9 +230,9 @@ int main(void){
             }
             fprintf(fp_novo, "\n"); // Adiciona uma nova linha após cada linha de pixels.
         }
-        fclose(fp);
+        fclose(fp_novo);
     }
 
-    // Fecha o arquivo.
+    // Mensagem final ao encerrar o programa
     printf("-------------------------------FIM-----------------------------\n");
 }
