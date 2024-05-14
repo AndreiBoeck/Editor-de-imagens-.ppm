@@ -44,7 +44,7 @@ struct Pixel **aumentaBrilho(struct Pixel **matriz, int linhas, int colunas, int
             matriz[i][j].G = (matriz[i][j].G * porcentagem)/100;
             matriz[i][j].B = (matriz[i][j].B * porcentagem)/100;
 
-            // Evita que o pixel ultrapasse o limite de 255.
+            // Evita que o pixel ultrapasse o limite de valor.
             if(matriz[i][j].R > valor){
                 matriz[i][j].R = valor;
             }
